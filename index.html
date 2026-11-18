@@ -2,10 +2,9 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>PKSYSTEM – System produkcyjny</title>
-<meta name="theme-color" content="#1D6672" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#173740" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#17191B">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="PKSYSTEM">
@@ -443,14 +442,217 @@ dialog.dlg-poly[open]{display:block;position:fixed;top:50%;left:50%;right:auto;b
   .tile.person{min-height:104px}
   .tile.person .t1{font-size:26px}
 }
+
+/* =================================================================
+   WERSJA 2.5 – tablet z Androidem, kolory PK SYSTEM, pion i poziom
+   ================================================================= */
+:root{
+  --bg:#EEF2F5; --panel:#FFFFFF; --ink:#16191C; --muted:#5A6570; --line:#D3DBE2; --soft:#E5EBF0;
+  --head:#17191B; --head-ink:#FFFFFF; --logo-blue:#1FB0EC;
+  --brand:#0067B1; --brand-deep:#004B82; --brand-btn:#007CC4; --brandtint:#DCEFFA; --focus:#00A8E8;
+  --go:#1E8C5A; --go-ink:#FFFFFF; --stop:#C8372D; --stop-ink:#FFFFFF; --pause:#F2B705; --pause-ink:#2B2105;
+  --warn-bg:#FFF1CC; --warn-ink:#6B4A00;
+  --sh1:#0091DA; --sh2:#0058B0; --sh-ink:#FFFFFF;
+  --op-zgrzewanie:#E07A2F; --op-szypulkowanie:#139C93; --op-pakowanie:#7A5CC8; --op-trakowanie:#D24C84;
+  --op-obsluga:#A77333; --op-sprzatanie:#4E9E52; --op-inna:#86919A; --op-multi:#2F4F86;
+  --bar-h:66px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101214; --panel:#1A1D20; --ink:#E8ECEF; --muted:#9AA4AD; --line:#2B3137; --soft:#22272B;
+    --head:#0B0C0D; --head-ink:#FFFFFF;
+    --brand:#4CC2F2; --brand-deep:#A9E2FA; --brand-btn:#0079C2; --brandtint:#0E2C3D; --focus:#4CC2F2;
+    --go:#2FA673; --go-ink:#04140D; --stop:#E05A4F; --stop-ink:#1F0503; --pause:#F2B705; --pause-ink:#2B2105;
+    --warn-bg:#47380F; --warn-ink:#FFE2A0;
+    --sh1:#0079C2; --sh2:#00478C;
+    --op-zgrzewanie:#F09450; --op-szypulkowanie:#33BDB3; --op-pakowanie:#9A82E0; --op-trakowanie:#E671A2;
+    --op-obsluga:#C99757; --op-sprzatanie:#6FBE73; --op-inna:#A3ADB5; --op-multi:#6F8FC9;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101214; --panel:#1A1D20; --ink:#E8ECEF; --muted:#9AA4AD; --line:#2B3137; --soft:#22272B;
+  --head:#0B0C0D; --head-ink:#FFFFFF;
+  --brand:#4CC2F2; --brand-deep:#A9E2FA; --brand-btn:#0079C2; --brandtint:#0E2C3D; --focus:#4CC2F2;
+  --go:#2FA673; --go-ink:#04140D; --stop:#E05A4F; --stop-ink:#1F0503; --pause:#F2B705; --pause-ink:#2B2105;
+  --warn-bg:#47380F; --warn-ink:#FFE2A0;
+  --sh1:#0079C2; --sh2:#00478C;
+  --op-zgrzewanie:#F09450; --op-szypulkowanie:#33BDB3; --op-pakowanie:#9A82E0; --op-trakowanie:#E671A2;
+  --op-obsluga:#C99757; --op-sprzatanie:#6FBE73; --op-inna:#A3ADB5; --op-multi:#6F8FC9;
+}
+
+/* ---------- nagłówek z logo ---------- */
+.top{position:relative;flex:none;background-color:var(--head);color:var(--head-ink);
+  background-image:radial-gradient(circle at 2px 2px,rgba(255,255,255,.07) 1.5px,transparent 2px);background-size:16px 16px;
+  border-bottom:3px solid var(--logo-blue)}
+.brand .logo{flex:none;display:block}
+.wm{font-weight:800;font-size:23px;letter-spacing:.01em;line-height:1}
+.wm b{font-weight:800;color:#FFFFFF}
+.wm i{font-style:normal;font-weight:800;color:var(--logo-blue)}
+.sub{color:#AEB6BD;opacity:1;margin-top:4px}
+.icon-btn{background:rgba(255,255,255,.1)}
+.icon-btn:hover{background:rgba(255,255,255,.18)}
+.lockbtn{background:var(--soft);color:var(--ink)}
+
+/* ---------- układ ekranu: stały nagłówek i dolny pasek, przewija się tylko środek ---------- */
+html,body{height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;min-height:0;overflow:hidden}
+main{flex:1 1 auto;min-height:0;max-width:none;width:100%;margin:0;overflow-x:hidden;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;display:flex;flex-direction:column;
+  padding-bottom:16px}
+.view.on{flex:1 0 auto;width:100%;max-width:1100px;margin:0 auto}
+.bar{position:relative;flex:none;min-height:var(--bar-h)}
+.shift-grid{min-height:160px}
+.toast{bottom:calc(var(--bar-h) + 14px + env(safe-area-inset-bottom,0px))}
+.upd{bottom:calc(var(--bar-h) + 14px + env(safe-area-inset-bottom,0px))}
+
+/* ---------- akcenty w kolorach logo ---------- */
+.shift-tile.sh1{background-color:var(--sh1)}
+.shift-tile.sh2{background-color:var(--sh2)}
+.steps li.done,.steps li.cur{border-color:var(--sh1)}
+.steps li.cur{color:var(--brand)}
+.bar button[aria-current="page"]{color:var(--brand)}
+.bar button[aria-current="page"]::before{background:var(--sh1)}
+.qu[aria-pressed="true"]{border-color:var(--sh1);background:var(--brandtint);color:var(--brand-deep);box-shadow:inset 0 0 0 1px var(--sh1)}
+.pick:hover,.tile:hover{border-color:var(--sh1)}
+.kpi{border-top:4px solid var(--sh1)}
+
+/* ---------- tablet w pionie (np. Galaxy Tab A11) ---------- */
+@media (orientation:portrait) and (min-width:480px) and (max-width:699px){
+  .tiles.auto{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .tile.person{min-height:64px;padding:6px 8px;gap:4px}
+  .tile.person .t1{font-size:20px}
+}
+/* imiona łamią się tylko na spacjach, nie w środku słowa */
+.tile.person .t1{overflow-wrap:break-word;word-break:normal}
+
+/* ---------- układ poziomy ---------- */
+@media (orientation:landscape){
+  .narrow{max-width:1100px}
+  .shift-grid{grid-template-rows:1fr;grid-template-columns:1fr 1fr}
+}
+@media (orientation:landscape) and (min-width:700px){
+  .tiles.auto{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .pick-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ops{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tgrid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .rlist{grid-template-columns:1fr 1fr}
+  dialog{width:min(720px,calc(100% - 24px))}
+}
+/* niski ekran (tablet poziomo): wszystko ciaśniej, Start zawsze widoczny */
+@media (orientation:landscape) and (max-height:640px){
+  :root{--bar-h:52px}
+  .top{padding-top:calc(6px + env(safe-area-inset-top,0px));padding-bottom:6px}
+  .brand .logo{width:32px;height:32px}
+  .wm{font-size:19px}
+  .sub{font-size:10px;margin-top:2px}
+  .icon-btn{width:38px;height:38px}
+  main{padding-top:10px;padding-bottom:10px}
+  .steps{margin-bottom:8px}
+  .steps li{font-size:12.5px;padding-top:4px;border-top-width:3px}
+  h1{font-size:21px;margin:0 0 8px}
+  .lead{margin:-4px 0 8px;font-size:15px}
+  .back{margin:0 0 2px -4px;padding:2px 4px}
+  .shift-grid{min-height:140px;gap:14px}
+  .shift-tile{font-size:46px;border-radius:22px}
+  .tile.person{min-height:60px;padding:6px}
+  .tile.person .t1{font-size:19px}
+  .wst{font-size:11.5px;padding:1px 8px}
+  .tiles{gap:9px}
+  .pick{min-height:50px;font-size:17px;padding:8px 14px}
+  .pick-list{gap:8px}
+  .summary{margin-bottom:8px}
+  .chip{font-size:14px}
+  .panel{padding:14px 16px}
+  h2{font-size:20px;margin:0 0 4px}
+  .sub2{margin:0 0 8px}
+  .op{min-height:48px;font-size:16px;padding:8px 12px}
+  .btn.wide{font-size:22px;padding:12px;margin-top:10px;min-height:52px}
+  .steps{display:none}
+  .home-in .lead{display:none}
+  .tile.person{min-height:56px}
+  .tcard.big .clock{font-size:42px}
+  .tcard.big .opchip{font-size:13.5px}
+  .tcard.big{padding:12px 16px;gap:4px}
+  .tcard.big .clock{font-size:46px}
+  .tcard.big .job{font-size:17px}
+  .tcard.big .actions .btn{padding:12px;font-size:18px}
+  .bar button{padding:5px 6px 4px;font-size:12.5px}
+  .bar svg{width:22px;height:22px}
+  /* okna Pauza / Stop */
+  dialog{max-height:96%}
+  .dlg-body{padding:14px 18px}
+  .dlg-body .sum{margin:-2px 0 4px}
+  .big-dur{font-size:26px;margin:0 0 4px}
+  .dlg-body label,.dlg-body .lbl{margin:10px 0 4px}
+  .qu{min-height:48px;font-size:17px}
+  .stepb{min-height:48px;font-size:28px}
+  .qin{font-size:22px}
+  .qty-row{grid-template-columns:56px minmax(0,1fr) 56px}
+  textarea#nt{min-height:44px}
+  .row2{margin-top:10px}
+  .rlist{gap:8px;margin:8px 0}
+  .rbtn{padding:11px 14px;font-size:17px}
+  .btn.wide2{margin-top:8px}
+}
+
+/* Start zawsze widoczny: przyklejony do dołu przewijanej treści */
+#startBtn{position:-webkit-sticky;position:sticky;bottom:0;z-index:2;box-shadow:0 -12px 0 var(--panel)}
+
+/* okno Stop: w pionie jedna kolumna */
+.dcols .dc1>h2{margin-top:0}
+
+/* poziomo: Start jako duży przycisk po prawej, karta zlecenia i okno Stop w dwóch kolumnach */
+@media (orientation:landscape) and (min-width:700px){
+  .panel.opsp{display:grid;grid-template-columns:minmax(0,1fr) 200px;column-gap:16px;align-items:start}
+  .panel.opsp>*{grid-column:1}
+  .panel.opsp>.ops{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .panel.opsp>#startBtn{grid-column:2;grid-row:1 / span 6;align-self:stretch;position:static;box-shadow:none;margin:0;min-height:120px;font-size:30px}
+  .tcard.big{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,36%);column-gap:22px;align-items:center}
+  .tcard.big>*{grid-column:1}
+  .tcard.big>.actions{grid-column:2;grid-row:1 / span 6;flex-direction:column;align-self:stretch;justify-content:center;margin:0}
+  .tcard.big .actions .btn{flex:1 1 0;min-height:56px}
+  dialog:has(.dcols){width:min(860px,calc(100% - 24px))}
+  .dlg-body.dcols{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);column-gap:24px;align-items:start}
+  .dcols .dc1 .big-dur{font-size:34px}
+  .dcols .dc2>.lbl:first-child,.dcols .dc2>label:first-child{margin-top:0}
+}
+@media (orientation:landscape) and (min-width:960px){
+  .panel.opsp>.ops{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .panel.opsp{grid-template-columns:minmax(0,1fr) 220px}
+}
+
+/* nagłówek panelu operacji w jednym wierszu */
+.ophead{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:14px}
+.ophead h2{margin-bottom:4px}
+.ophead .sub2{margin:0 0 10px}
+@media (orientation:landscape) and (max-height:640px){
+  .ophead .sub2{margin:0 0 8px}
+  .dlg-body textarea#nt{height:48px;min-height:48px}
+  .dlg-body .hint:empty{min-height:0;margin-top:0}
+  .dlg-body .row2{margin-top:12px}
+}
+@media (orientation:portrait) and (min-width:480px) and (max-width:699px){
+  .op{min-height:54px}
+}
+@media (orientation:landscape) and (max-height:640px){
+  main{padding-top:8px;padding-bottom:6px}
+  .summary{margin-bottom:6px}
+  .chip{padding-top:3px;padding-bottom:3px}
+  .panel.opsp{padding:12px 16px}
+  .panel.opsp .op{min-height:44px}
+  .panel.opsp .ops{gap:7px}
+  .mine-h{display:none}
+  .tcard.big .clock{font-size:40px}
+}
+main{scroll-padding-bottom:96px}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="brand">
-    <svg viewBox="0 0 32 32" width="38" height="38" aria-hidden="true"><rect width="32" height="32" rx="10" fill="rgba(255,255,255,.2)"/><circle cx="11" cy="12" r="4.2" fill="#fff"/><circle cx="22" cy="10.5" r="2.7" fill="#fff" opacity=".85"/><circle cx="19" cy="21.5" r="5.2" fill="#fff" opacity=".95"/><circle cx="8.5" cy="23" r="2" fill="#fff" opacity=".7"/></svg>
-    <div class="txt"><span class="wm">PKSYSTEM</span><span class="sub">SYSTEM PRODUKCYJNY</span></div>
+    <svg class="logo" viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M24 3.5 42 14v20L24 44.5 6 34V14z" fill="none" stroke="#E9EDF0" stroke-width="3" stroke-linejoin="round"/><path d="M24 12.5l10 5.8-10 5.8-10-5.8z" fill="#3DBDF2"/><path d="M14 18.3l10 5.8v11.6l-10-5.8z" fill="#0091DA"/><path d="M34 18.3l-10 5.8v11.6l10-5.8z" fill="#0058B0"/></svg>
+    <div class="txt"><span class="wm"><b>PK</b><i>SYSTEM</i></span><span class="sub">SYSTEM PRODUKCYJNY</span></div>
   </div>
   <button class="icon-btn" id="themeBtn" aria-label="Przełącz jasny i ciemny motyw"></button>
 </header>
@@ -472,7 +674,6 @@ dialog.dlg-poly[open]{display:block;position:fixed;top:50%;left:50%;right:auto;b
 </nav>
 
 <dialog id="dlg"></dialog>
-<div id="rotate" role="alert" hidden><svg viewBox="0 0 64 64" width="76" height="76" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="19" y="6" width="26" height="46" rx="6"/><path d="M29 45h6"/><path d="M52 14c5 3 8 8 8 14M60 28l-4-5M60 28l5-4"/></svg><h1>Obróć telefon do pionu</h1><p>Aplikacja działa w pozycji pionowej.</p></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -1762,7 +1963,7 @@ window.PKQR=function(text){var QRCode=req("index"),L=req("QRErrorCorrectLevel");
    KONFIGURACJA – PIN, zmiany, operacje, powody pauz, pracownicy
    ================================================================== */
 const PIN = "1975";
-const VERSION = "pilot 2.4";
+const VERSION = "pilot 2.5";
 /* Godzin nie widać na ekranie. Służą tylko do oznaczania wpisów „do weryfikacji”. */
 const SHIFTS = [
   {id:1, name:"Zmiana 1", from:"06:00", to:"14:00"},
@@ -1830,6 +2031,7 @@ function onMedia(q,fn){try{const m=matchMedia(q);if(m.addEventListener)m.addEven
   if(IOS_VER)document.documentElement.classList.add("ios");
 })();
 
+function toTop(){const m=document.querySelector("main");if(m)m.scrollTop=0;try{window.scrollTo(0,0)}catch(e){}}
 const store={
   get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
@@ -1956,7 +2158,7 @@ function setTab(t){
   tab=t;
   $$(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+t));
   $$(".bar button").forEach(b=>{if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
-  render();window.scrollTo(0,0);
+  render();toTop();
 }
 $$(".bar button").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="home")resetFlow();setTab(b.dataset.tab)});
 function render(){if(tab==="home")renderHome();else renderMgr();updateBadge()}
@@ -1988,17 +2190,23 @@ function toggleOp(list,id,btn,wrapSel,inputSel){
   const i=list.indexOf(id);
   if(i>=0)list.splice(i,1);else list.push(id);
   if(btn)btn.setAttribute("aria-pressed",i<0);
-  if(id==="inna"){const w=$(wrapSel);if(w){w.hidden=i>=0;if(i<0){const inp=$(inputSel);if(inp)inp.focus()}}}
+  if(id==="inna"){const w=$(wrapSel);if(w){w.hidden=i>=0;if(i<0){const inp=$(inputSel);if(inp){inp.focus();showAboveStart(inp)}}}}
 }
+/* pole „Inna” nie może się chować pod przyklejonym przyciskiem Start */
+function showAboveStart(el){
+  const m=document.querySelector("main");if(!m||!m.contains(el))return;
+  const go=()=>{m.scrollTop=m.scrollHeight};go();setTimeout(go,350);
+}
+document.addEventListener("focusin",e=>{if(e.target&&e.target.id==="opText")showAboveStart(e.target)});
 
 /* ==================================================================
    EKRAN START: zmiana → pracownik → zlecenie
    ================================================================== */
 const homeEl=$("#v-home");
 function stepper(n){const L=["Zmiana","Pracownik","Zlecenie"];return '<ol class="steps">'+L.map((l,i)=>'<li class="'+(i+1<n?"done":i+1===n?"cur":"")+'">'+l+'</li>').join("")+'</ol>'}
-function chipsTop(){
+function chipsTop(extra){
   const sh=shiftById(flow.shift);
-  return '<div class="summary"><span class="chip">'+esc(sh.name)+'<button class="link" data-back="1">zmień</button></span><span class="chip">'+esc(flow.worker)+'<button class="link" data-back="2">zmień</button></span></div>';
+  return '<div class="summary"><span class="chip">'+esc(sh.name)+'<button class="link" data-back="1">zmień</button></span><span class="chip">'+esc(flow.worker)+'<button class="link" data-back="2">zmień</button></span>'+(extra||'')+'</div>';
 }
 function jobCard(t,mode){
   const paused=!!t.open,late=vnow()>t.shiftEnd;
@@ -2017,7 +2225,7 @@ const searchBox=n=>n>8?'<input class="in search" id="q" type="search" placeholde
 const pickList=(items,attr)=>'<div class="pick-list">'+items.map(x=>'<button class="pick" data-'+attr+'="'+esc(x)+'" data-f="'+esc(x.toLowerCase())+'"><span>'+esc(x)+'</span><i aria-hidden="true">›</i></button>').join("")+'</div><p class="hint" id="noRes" hidden>Brak wyników.</p>';
 
 function mineHtml(){
-  return stepper(3)+chipsTop()+'<h1>Twoje zlecenie</h1><p class="lead">Nowe zlecenie zaczniesz po zakończeniu tego (Stop).</p>'
+  return stepper(3)+chipsTop()+'<h1 class="mine-h">Twoje zlecenie</h1><p class="lead">Nowe zlecenie zaczniesz po zakończeniu tego (Stop).</p>'
     +activeOf(flow.worker).map(t=>jobCard(t,"w")).join("")
     +'<button class="btn ghost wide2" data-act="home">Wróć do wyboru zmiany</button>';
 }
@@ -2025,11 +2233,11 @@ function orderHtml(){
   let h=stepper(3)+chipsTop();
   if(!cfg.plist.length)return h+'<div class="panel empty"><b>Brak listy klientów i projektów</b>Kierownik musi wczytać listę z Excela: Kierownik → Ustawienia → Lista projektów.</div><button class="btn ghost wide2" data-act="home">Wróć do wyboru zmiany</button>';
   if(!flow.client){const cl=clientsList();return h+'<h1>Wybierz klienta</h1>'+searchBox(cl.length)+pickList(cl,"client")}
-  h+='<div class="summary"><span class="chip">Klient: '+esc(flow.client)+'<button class="link" data-clr="client">zmień</button></span>'
-    +(flow.project?'<span class="chip">Projekt: '+esc(flow.project)+'<button class="link" data-clr="project">zmień</button></span>':'')+'</div>';
+  h=stepper(3)+chipsTop('<span class="chip">Klient: '+esc(flow.client)+'<button class="link" data-clr="client">zmień</button></span>'
+    +(flow.project?'<span class="chip">Projekt: '+esc(flow.project)+'<button class="link" data-clr="project">zmień</button></span>':''));
   if(!flow.project){const pr=projectsFor(flow.client);return h+'<h1>Wybierz projekt</h1>'+searchBox(pr.length)+pickList(pr,"project")}
   const inna=flow.ops.indexOf("inna")>=0;
-  return h+'<div class="panel"><h2>Co robisz?</h2><p class="sub2">Możesz zaznaczyć kilka operacji.</p><div class="ops" role="group" aria-label="Operacje">'+OPS.map(o=>opBtn(o,flow.ops)).join("")+'</div>'
+  return h+'<div class="panel opsp"><div class="ophead"><h2>Co robisz?</h2><p class="sub2">Możesz zaznaczyć kilka operacji.</p></div><div class="ops" role="group" aria-label="Operacje">'+OPS.map(o=>opBtn(o,flow.ops)).join("")+'</div>'
     +'<div id="opTextWrap" '+(inna?'':'hidden')+'><label for="opText">Opis operacji „Inna” (maks. 2 słowa)</label><input class="in" id="opText" maxlength="30" autocomplete="off" value="'+esc(flow.opText)+'"></div>'
     +'<div class="hint" id="formHint" aria-live="polite"></div><button class="btn go wide" id="startBtn" disabled>Start</button></div>';
 }
@@ -2081,13 +2289,13 @@ function filterPicks(v){
 homeEl.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   const d=b.dataset;
-  if(d.shift){flow.shift=+d.shift;flow.step=2;renderHome();window.scrollTo(0,0);return}
-  if("worker" in d){flow.worker=d.worker;flow.client="";flow.project="";flow.ops=[];flow.opText="";flow.step=3;renderHome();window.scrollTo(0,0);return}
+  if(d.shift){flow.shift=+d.shift;flow.step=2;renderHome();toTop();return}
+  if("worker" in d){flow.worker=d.worker;flow.client="";flow.project="";flow.ops=[];flow.opText="";flow.step=3;renderHome();toTop();return}
   if(d.back){flow.step=+d.back;renderHome();return}
   if(d.clr==="client"){flow.client="";flow.project="";renderHome();return}
   if(d.clr==="project"){flow.project="";renderHome();return}
-  if("client" in d){flow.client=d.client;flow.project="";renderHome();window.scrollTo(0,0);return}
-  if("project" in d){flow.project=d.project;renderHome();window.scrollTo(0,0);return}
+  if("client" in d){flow.client=d.client;flow.project="";renderHome();toTop();return}
+  if("project" in d){flow.project=d.project;renderHome();toTop();return}
   if(d.op){toggleOp(flow.ops,d.op,b,"#opTextWrap","#opText");refreshForm();return}
   if(b.id==="startBtn"){startTimer();return}
   if(d.act==="home"){backHome();return}
@@ -2129,15 +2337,15 @@ function openStop(id,byMgr,after){
   const t=active.find(x=>x.id===id);if(!t)return;
   const at=vnow(),late=at>t.shiftEnd,work=workOf(t,at),rule=qtyRule(t.ops);
   let unit=null;
-  openDlg('<div class="dlg-body"><h2>Zakończ zlecenie</h2><p class="sum">'+esc(t.worker)+' · '+esc(t.client)+' · '+esc(t.project)+'<br>'+esc(opsLabel(t.ops,t.opText))+'</p>'
+  openDlg('<div class="dlg-body dcols"><div class="dc1"><h2>Zakończ zlecenie</h2><p class="sum">'+esc(t.worker)+' · '+esc(t.client)+' · '+esc(t.project)+'<br>'+esc(opsLabel(t.ops,t.opText))+'</p>'
     +'<div class="big-dur">'+fmtDur(work)+'</div>'
     +(late?'<div class="flag">Koniec zmiany minął – wpis zostanie oznaczony do weryfikacji kierownika.</div>':'')
-    +(byMgr?'<div class="flag">Zlecenie zatrzymuje kierownik – wpis dostanie takie oznaczenie.</div>':'')
+    +(byMgr?'<div class="flag">Zlecenie zatrzymuje kierownik – wpis dostanie takie oznaczenie.</div>':'')+'</div><div class="dc2">'
     +(rule!=="none"?'<div class="lbl">Co zostało zrobione?'+(rule==="opt"?' (opcjonalnie)':'')+'</div><div class="units">'+QTY_UNITS.map(u=>'<button class="qu" data-qu="'+u.id+'" aria-pressed="false">'+u.name+'</button>').join("")+'</div>'
       +'<label for="q">Ilość</label><div class="qty-row"><button class="stepb" data-step="-1" aria-label="Mniej o 0,5">−</button><input class="in qin" id="q" inputmode="decimal" autocomplete="off" placeholder="0"><button class="stepb" data-step="1" aria-label="Więcej o 0,5">+</button></div>':'')
     +'<label for="nt">Uwagi (opcjonalnie)</label><textarea class="in" id="nt" rows="2" maxlength="200"></textarea>'
     +'<div class="hint warn" id="qh" aria-live="polite"></div>'
-    +'<div class="row2"><button class="btn ghost" data-close>Wróć</button><button class="btn go" id="sv">Zapisz</button></div></div>',
+    +'<div class="row2"><button class="btn ghost" data-close>Wróć</button><button class="btn go" id="sv">Zapisz</button></div></div></div>',
   e=>{
     const b=e.target.closest("button");if(!b)return;
     if(b.dataset.qu){unit=b.dataset.qu;$$(".qu",dlg).forEach(x=>x.setAttribute("aria-pressed",x===b));$("#qh").textContent="";return}
@@ -3052,7 +3260,7 @@ function drawQR(){
   let m;try{m=window.PKQR(url)}catch(e){q.textContent="Nie udało się wygenerować kodu QR.";return}
   let p="";for(let r=0;r<m.n;r++)for(let c=0;c<m.n;c++)if(m.isDark(r,c))p+="M"+c+" "+r+"h1v1h-1z";
   const s=m.n+8;
-  q.innerHTML='<svg viewBox="-4 -4 '+s+' '+s+'" width="200" height="200" role="img" aria-label="Kod QR z adresem aplikacji" shape-rendering="crispEdges"><rect x="-4" y="-4" width="'+s+'" height="'+s+'" fill="#fff"/><path d="'+p+'" fill="#13313A"/></svg>';
+  q.innerHTML='<svg viewBox="-4 -4 '+s+' '+s+'" width="200" height="200" role="img" aria-label="Kod QR z adresem aplikacji" shape-rendering="crispEdges"><rect x="-4" y="-4" width="'+s+'" height="'+s+'" fill="#fff"/><path d="'+p+'" fill="#17191B"/></svg>';
 }
 
 mgrEl.addEventListener("click",e=>{
@@ -3061,7 +3269,7 @@ mgrEl.addEventListener("click",e=>{
   if(b.id==="pinOk"){checkPin();return}
   if(d.ms){msAction(d.ms);return}
   if(b.id==="lockBtn"){unlocked=false;resetFlow();setTab("home");return}
-  if(d.seg){mgrTab=d.seg;renderMgr();window.scrollTo(0,0);return}
+  if(d.seg){mgrTab=d.seg;renderMgr();toTop();return}
   if(d.act==="edit"){openActiveEdit(d.id);return}
   if(d.act==="pause"){openPause(d.id,renderMgr);return}
   if(d.act==="resume"){resumeJob(d.id);renderMgr();return}
@@ -3128,13 +3336,8 @@ function checkPin(){
 
 /* ---------- orientacja pionowa ---------- */
 const rot=$("#rotate");
-function checkRot(){
-  let land=false;
-  try{land=(screen.orientation&&screen.orientation.type)?screen.orientation.type.indexOf("landscape")===0:innerWidth>innerHeight}catch(e){land=innerWidth>innerHeight}
-  let coarse=!!IOS_VER;try{coarse=coarse||matchMedia("(pointer: coarse)").matches}catch(e){}
-  const typing=/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||"");
-  rot.hidden=!(land&&coarse&&!typing);
-}
+/* interfejs działa w pionie i w poziomie – bez komunikatu o obróceniu */
+function checkRot(){if(rot)rot.hidden=true}
 ["resize","orientationchange"].forEach(ev=>window.addEventListener(ev,checkRot));
 if(screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener("change",checkRot);
 document.addEventListener("focusin",checkRot);
