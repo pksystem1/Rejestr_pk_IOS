@@ -645,6 +645,15 @@ main{flex:1 1 auto;min-height:0;max-width:none;width:100%;margin:0;overflow-x:hi
   .tcard.big .clock{font-size:40px}
 }
 main{scroll-padding-bottom:96px}
+
+/* =================================================================
+   WERSJA 2.6 – pełny ekran, godzina w nagłówku
+   ================================================================= */
+.top-r{display:flex;align-items:center;gap:14px;flex:none}
+.hclock{font-weight:800;font-size:24px;line-height:1;letter-spacing:.02em;color:#FFFFFF;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (orientation:landscape) and (max-height:640px){
+  .hclock{font-size:20px}
+}
 </style>
 </head>
 <body>
@@ -654,7 +663,7 @@ main{scroll-padding-bottom:96px}
     <svg class="logo" viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M24 3.5 42 14v20L24 44.5 6 34V14z" fill="none" stroke="#E9EDF0" stroke-width="3" stroke-linejoin="round"/><path d="M24 12.5l10 5.8-10 5.8-10-5.8z" fill="#3DBDF2"/><path d="M14 18.3l10 5.8v11.6l-10-5.8z" fill="#0091DA"/><path d="M34 18.3l-10 5.8v11.6l10-5.8z" fill="#0058B0"/></svg>
     <div class="txt"><span class="wm"><b>PK</b><i>SYSTEM</i></span><span class="sub">SYSTEM PRODUKCYJNY</span></div>
   </div>
-  <button class="icon-btn" id="themeBtn" aria-label="Przełącz jasny i ciemny motyw"></button>
+  <div class="top-r"><span class="hclock" id="hclock" aria-label="Godzina"></span><button class="icon-btn" id="themeBtn" aria-label="Przełącz jasny i ciemny motyw"></button></div>
 </header>
 
 <main>
@@ -1963,7 +1972,7 @@ window.PKQR=function(text){var QRCode=req("index"),L=req("QRErrorCorrectLevel");
    KONFIGURACJA – PIN, zmiany, operacje, powody pauz, pracownicy
    ================================================================== */
 const PIN = "1975";
-const VERSION = "pilot 2.5";
+const VERSION = "pilot 2.6";
 /* Godzin nie widać na ekranie. Służą tylko do oznaczania wpisów „do weryfikacji”. */
 const SHIFTS = [
   {id:1, name:"Zmiana 1", from:"06:00", to:"14:00"},
@@ -2374,7 +2383,16 @@ function openStop(id,byMgr,after){
 }
 
 /* ---------- zegary ---------- */
+/* godzina w nagłówku (w trybie pełnego ekranu zegar Androida jest ukryty) */
+const hclockEl=document.getElementById("hclock");
+function headClock(){
+  if(!hclockEl)return;
+  const d=new Date(),t=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  if(hclockEl.textContent!==t)hclockEl.textContent=t;
+}
+headClock();
 function tick(){
+  headClock();
   $$("[data-clock]").forEach(el=>{const t=active.find(x=>x.id===el.dataset.clock);if(t)el.textContent=fmtClock(workOf(t))});
   $$("[data-pausetime]").forEach(el=>{const t=active.find(x=>x.id===el.dataset.pausetime);if(t&&t.open)el.textContent=fmtClock(vnow()-t.open.from)});
   $$("[data-flag]").forEach(el=>{const t=active.find(x=>x.id===el.dataset.flag);if(t)el.hidden=!(vnow()>t.shiftEnd)});
@@ -3226,7 +3244,7 @@ function msAction(a){
 
 /* ---- Ustawienia ---- */
 let installEvt=null;
-const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
+const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||matchMedia("(display-mode: fullscreen)").matches||navigator.standalone===true}catch(e){return false}};
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;if(tab==="mgr"&&unlocked&&mgrTab==="settings")renderMgr()});
 window.addEventListener("appinstalled",()=>{installEvt=null;if(tab==="mgr"&&unlocked&&mgrTab==="settings")renderMgr()});
 function installPanel(){
